@@ -1,0 +1,626 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE MIDNIGHT POSTBOX  ·  style.css  v4
+   ═══════════════════════════════════════════════════════════════ */
+
+@font-face { font-family:'DearDiary';    src:url('Dear Diary.ttf') format('truetype'); }
+@font-face { font-family:'ATWriter';     src:url('atwriter.ttf') format('truetype'); }
+@font-face { font-family:'LinLibertine'; src:url('LinLibertine_aZL.ttf') format('truetype'); }
+
+:root {
+  --gold:       #c8a96e;
+  --gold-light: #e8d5a3;
+  --gold-dim:   rgba(200,169,110,.35);
+  --ink:        #2b1a10;
+  --ink-faint:  rgba(43,26,16,.38);
+  --cream:      #f7efd8;
+  --panel:      rgba(10,16,32,.70);
+  --panel-b:    rgba(200,169,110,.18);
+  --snap:       cubic-bezier(.34,1.56,.64,1);
+  --out:        cubic-bezier(.22,1,.36,1);
+  --io:         cubic-bezier(.4,0,.2,1);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { height:100%; }
+img  { user-select:none; -webkit-user-drag:none; }
+
+body {
+  font-family:'LinLibertine',Georgia,serif;
+  color:var(--cream);
+  min-height:100vh;
+  overflow-x:hidden;
+  /* ── FIXED DESK BACKGROUND ── */
+  background:
+    /* Stars — tiny white specks at the top */
+    radial-gradient(1.2px 1.2px at  7% 8%,  rgba(255,255,255,.85) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 15% 4%,  rgba(255,255,255,.70) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 24% 11%, rgba(255,255,255,.90) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 34% 6%,  rgba(255,255,255,.65) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 44% 3%,  rgba(255,255,255,.80) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 56% 9%,  rgba(255,255,255,.75) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 66% 5%,  rgba(255,255,255,.85) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 76% 13%, rgba(255,255,255,.60) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 7%,  rgba(255,255,255,.88) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 93% 4%,  rgba(255,255,255,.70) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 11% 22%, rgba(255,255,255,.45) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 48% 18%, rgba(255,255,255,.50) 0%,transparent 100%),
+    radial-gradient(1px   1px   at 72% 25%, rgba(255,255,255,.40) 0%,transparent 100%),
+    /* Warm candle/lamp glow on desk — from bottom */
+    radial-gradient(ellipse 75% 45% at 50% 108%, rgba(190,120,40,.28) 0%,rgba(140,80,20,.12) 40%,transparent 70%),
+    /* Subtle side vignette */
+    radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgba(0,0,0,.55) 100%),
+    /* Sky gradient: deep indigo top → dark navy desk */
+    linear-gradient(185deg,
+      #060a18 0%,
+      #0a1028 25%,
+      #0e1535 50%,
+      #101830 70%,
+      #0c1225 88%,
+      #080e1c 100%
+    );
+}
+
+/* Grain texture */
+body::after {
+  content:''; position:fixed; inset:0; z-index:1000; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:200px 200px; opacity:.042; mix-blend-mode:overlay;
+}
+
+/* Twinkling stars animation */
+body::before {
+  content:''; position:fixed; inset:0 0 60% 0; pointer-events:none; z-index:0;
+  animation:twinkle 6s ease-in-out infinite alternate;
+  background: inherit;
+  background-attachment: fixed;
+}
+@keyframes twinkle { from{opacity:.7} to{opacity:1} }
+
+/* ══════════════════════════════════════════════════════════════════
+   SPLASH
+══════════════════════════════════════════════════════════════════ */
+#splash {
+  position:fixed; inset:0; z-index:500;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:clamp(1rem,4vh,2rem) 1.5rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 108%,rgba(180,110,35,.22) 0%,transparent 65%),
+    linear-gradient(185deg,#060a18 0%,#0a1028 40%,#0e1535 100%);
+  transition:opacity .9s var(--io), visibility .9s;
+}
+#splash.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+
+.splash-icon {
+  width:clamp(70px,14vw,130px);
+  margin-bottom:clamp(.8rem,2vh,1.4rem);
+  filter:drop-shadow(0 0 28px rgba(200,169,110,.45));
+  animation:splash-float 4s ease-in-out infinite;
+}
+@keyframes splash-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-11px);} }
+.splash-title {
+  font-family:'DearDiary',cursive;
+  font-size:clamp(1.9rem,5vw,4rem);
+  color:var(--gold-light);
+  text-shadow:0 0 50px rgba(200,169,110,.44),0 2px 4px rgba(0,0,0,.8);
+  text-align:center; line-height:1.1; letter-spacing:.03em;
+}
+.splash-sub {
+  font-family:'ATWriter',monospace; font-size:clamp(.5rem,1.2vw,.7rem);
+  color:rgba(232,213,163,.44); letter-spacing:.3em; text-transform:uppercase;
+  margin:clamp(.4rem,1vh,.6rem) 0 clamp(1.4rem,3vh,2.4rem);
+}
+.splash-divider {
+  width:80px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:0 auto clamp(1.4rem,3vh,2.4rem);
+}
+.btn-start {
+  padding:clamp(.72rem,1.8vh,.95rem) clamp(1.8rem,4vw,2.8rem);
+  background:transparent; border:1px solid var(--gold); border-radius:50px;
+  font-family:'ATWriter',monospace; font-size:clamp(.65rem,1.4vw,.82rem);
+  letter-spacing:.26em; text-transform:uppercase; color:var(--gold-light);
+  cursor:pointer; white-space:nowrap;
+  transition:all .35s var(--out); position:relative; overflow:hidden;
+}
+.btn-start::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 100%,rgba(200,169,110,.2) 0%,transparent 70%);
+  opacity:0; transition:opacity .35s;
+}
+.btn-start:hover { box-shadow:0 0 36px rgba(200,169,110,.3); transform:translateY(-3px); }
+.btn-start:hover::before { opacity:1; }
+.btn-start:active { transform:translateY(0) scale(.97); }
+
+/* ══════════════════════════════════════════════════════════════════
+   COMPOSER — full viewport, no scroll on desktop
+══════════════════════════════════════════════════════════════════ */
+#composerPage {
+  position:relative; z-index:1;
+  height:100svh;
+  display:flex; flex-direction:column;
+  padding:clamp(.5rem,1.2vh,.8rem) clamp(.7rem,1.5vw,1rem) clamp(.4rem,.8vh,.6rem);
+  gap:clamp(.35rem,.8vh,.55rem);
+  overflow:hidden;
+  opacity:0; transition:opacity .8s ease .2s;
+}
+#composerPage.visible { opacity:1; }
+
+/* Masthead */
+.masthead { text-align:center; flex-shrink:0; }
+.masthead-title {
+  font-family:'DearDiary',cursive;
+  font-size:clamp(1.3rem,3.2vw,2.8rem);
+  color:var(--gold-light);
+  text-shadow:0 0 42px rgba(200,169,110,.38),0 2px 4px rgba(0,0,0,.7);
+  line-height:1.1; letter-spacing:.03em;
+}
+.masthead-sub {
+  font-family:'ATWriter',monospace; font-size:clamp(.44rem,1vw,.6rem);
+  color:rgba(232,213,163,.36); letter-spacing:.28em; text-transform:uppercase; margin-top:.22rem;
+}
+.masthead-rule { width:80px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:.45rem auto 0; }
+
+/* Top bar — sky slider removed, just audio controls */
+.top-bar {
+  display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; justify-content:center;
+  background:var(--panel); border:1px solid var(--panel-b);
+  backdrop-filter:blur(12px); border-radius:40px;
+  padding:.42rem 1.2rem; flex-shrink:0;
+}
+.tb-label { font-family:'ATWriter',monospace; font-size:.55rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); white-space:nowrap; flex-shrink:0; }
+.tb-sep { width:1px; height:16px; background:var(--panel-b); flex-shrink:0; }
+.audio-btn {
+  display:flex; align-items:center; gap:.3rem; padding:.26rem .65rem;
+  background:transparent; border:1px solid var(--panel-b); border-radius:20px;
+  color:rgba(232,213,163,.48); font-family:'ATWriter',monospace;
+  font-size:.54rem; letter-spacing:.09em; text-transform:uppercase;
+  cursor:pointer; transition:all .22s; white-space:nowrap;
+}
+.audio-btn .icon { font-size:.78rem; }
+.audio-btn:hover { border-color:var(--gold-dim); color:var(--gold-light); background:rgba(200,169,110,.08); }
+.audio-btn.on { border-color:var(--gold); color:var(--gold-light); background:rgba(200,169,110,.12); }
+
+/* TWO-COLUMN DESK */
+.desk-grid {
+  display:grid;
+  grid-template-columns:1fr 290px;
+  gap:1rem;
+  flex:1; min-height:0;
+  align-items:stretch;
+}
+
+/* LEFT: paper */
+.paper-col {
+  display:flex; align-items:center; justify-content:center;
+  min-height:0; padding:0 .5rem;
+}
+.paper-wrap {
+  position:relative;
+  height:100%;
+  width:auto;
+  /* Paper fills the column height keeping aspect ratio */
+  aspect-ratio:580/790;
+  max-width:100%;
+  filter:drop-shadow(0 18px 50px rgba(0,0,0,.65)) drop-shadow(0 5px 14px rgba(0,0,0,.32));
+  transition:transform .35s var(--out), filter .35s;
+}
+.paper-wrap:focus-within {
+  transform:translateY(-4px) scale(1.005);
+  filter:drop-shadow(0 26px 70px rgba(0,0,0,.7)) drop-shadow(0 6px 16px rgba(0,0,0,.38));
+}
+.paper-img { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; border-radius:3px; pointer-events:none; }
+
+/* Textarea — top:30% sits below the envelope/heart header art on paper-base.png */
+.letter-area {
+  position:absolute;
+  top:30%; left:9%; width:82%; height:60%;
+  background:transparent; border:none; outline:none; resize:none;
+  font-family:'DearDiary',cursive;
+  font-size:clamp(.82rem,1.7vh,1.18rem);
+  line-height:1.9; color:var(--ink); caret-color:#7b3a1a;
+  word-break:break-word; overflow-y:auto; scrollbar-width:none; z-index:2;
+  text-shadow:0 1px 0 rgba(255,255,255,.2);
+}
+.letter-area::-webkit-scrollbar { display:none; }
+.letter-area::placeholder { color:var(--ink-faint); font-style:italic; }
+.char-count {
+  position:absolute; bottom:3.2%; right:9%;
+  font-family:'ATWriter',monospace; font-size:.52rem; letter-spacing:.07em;
+  color:rgba(43,26,16,.3); pointer-events:none; z-index:3;
+}
+
+/* RIGHT COLUMN */
+.right-col {
+  display:flex; flex-direction:column; gap:.6rem;
+  min-height:0; overflow-y:auto; scrollbar-width:none;
+}
+.right-col::-webkit-scrollbar { display:none; }
+
+/* ── TRAY ─────────────────────────────────────────────────────────
+   Key fix: tray-wrap uses a taller aspect ratio so seals have real
+   vertical room, and seals-grid is positioned lower in the tray.
+────────────────────────────────────────────────────────────────── */
+.tray-wrap {
+  position:relative;
+  width:100%;
+  /* Taller aspect ratio gives seals proper room inside tray */
+  aspect-ratio:290/180;
+  flex-shrink:0;
+  filter:drop-shadow(0 8px 28px rgba(0,0,0,.55));
+}
+.tray-img {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:fill; pointer-events:none;
+}
+.seals-grid {
+  position:absolute;
+  /* These % values place the grid IN the wooden depression of the tray.
+     Adjust top/left/width/height to match your tray.png geometry. */
+  top:12%;
+  left:4%;
+  width:92%;
+  height:78%;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:repeat(2,1fr);
+  gap:3% 3%;
+  align-items:center; justify-items:center; z-index:2;
+}
+.seal-btn {
+  position:relative; width:80%; aspect-ratio:1;
+  background:none; border:none; padding:0; cursor:pointer; border-radius:50%;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,.38));
+  transition:transform .28s var(--snap), filter .28s ease;
+}
+.seal-btn img { width:100%; height:100%; object-fit:contain; border-radius:50%; display:block; pointer-events:none; }
+.seal-btn:hover {
+  transform:translateY(-7%) scale(1.12);
+  filter:drop-shadow(0 6px 14px rgba(200,169,110,.5)) drop-shadow(0 1px 4px rgba(0,0,0,.38));
+}
+.seal-btn.selected {
+  transform:translateY(-10%) scale(1.17);
+  filter:
+    drop-shadow(0 0 10px rgba(200,169,110,.85))
+    drop-shadow(0 0 22px rgba(200,169,110,.38))
+    drop-shadow(0 8px 20px rgba(0,0,0,.5));
+}
+.seal-btn.selected::after {
+  content:''; position:absolute; inset:-5%; border-radius:50%;
+  border:1.5px solid var(--gold); pointer-events:none;
+  animation:seal-ring 2.2s ease-in-out infinite;
+}
+@keyframes seal-ring { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.35;transform:scale(1.1);} }
+
+/* Controls panel */
+.controls {
+  background:var(--panel); backdrop-filter:blur(16px);
+  border:1px solid var(--panel-b); border-radius:14px;
+  padding:.9rem 1.1rem;
+  display:flex; flex-direction:column; gap:.8rem;
+  flex:1;
+}
+.ctrl-label {
+  font-family:'ATWriter',monospace; font-size:.54rem; letter-spacing:.23em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:.28rem; display:block;
+}
+.seal-preview-row { display:flex; align-items:center; gap:.7rem; }
+.seal-preview-img { width:34px; height:34px; object-fit:contain; border-radius:50%; filter:drop-shadow(0 2px 8px rgba(200,169,110,.5)); transition:all .3s var(--snap); }
+.seal-preview-name { font-family:'ATWriter',monospace; font-size:.6rem; color:rgba(232,213,163,.55); letter-spacing:.08em; }
+.datetime-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+.field { display:flex; flex-direction:column; flex:1; min-width:95px; }
+.field input[type="date"],
+.field input[type="time"] {
+  margin-top:.22rem; padding:.48rem .6rem;
+  background:rgba(255,255,255,.05); border:1px solid rgba(200,169,110,.24);
+  border-radius:7px; color:var(--cream); font-family:'ATWriter',monospace;
+  font-size:.68rem; letter-spacing:.04em; outline:none;
+  transition:border-color .2s, background .2s; color-scheme:dark;
+}
+.field input:focus { border-color:var(--gold); background:rgba(200,169,110,.08); }
+.btn-row { display:flex; gap:.55rem; }
+.btn {
+  flex:1; padding:.66rem .6rem; border:none; border-radius:9px;
+  font-family:'ATWriter',monospace; font-size:.62rem; letter-spacing:.12em; text-transform:uppercase;
+  cursor:pointer; position:relative; overflow:hidden;
+  transition:transform .3s var(--snap), box-shadow .3s;
+}
+.btn::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,.08); opacity:0; transition:opacity .18s; }
+.btn:hover::after { opacity:1; }
+.btn:active { transform:scale(.964) !important; }
+.btn-schedule { background:rgba(200,169,110,.12); border:1px solid rgba(200,169,110,.38); color:var(--gold-light); }
+.btn-schedule:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(200,169,110,.18); }
+.btn-express { background:linear-gradient(135deg,#7b2f10,#c05828); border:1px solid rgba(200,169,110,.25); color:#fff8f0; box-shadow:0 4px 16px rgba(120,50,16,.4); }
+.btn-express:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(120,50,16,.6); }
+.status-msg { font-family:'ATWriter',monospace; font-size:.6rem; letter-spacing:.09em; padding:.4rem .7rem; border-radius:7px; text-align:center; display:none; }
+.status-msg.error   { display:block; background:rgba(180,50,50,.18); border:1px solid rgba(180,50,50,.33); color:#f4a5a5; }
+.status-msg.success { display:block; background:rgba(50,140,80,.18); border:1px solid rgba(50,140,80,.33); color:#a8f0c0; }
+
+/* ══════════════════════════════════════════════════════════════════
+   SEALING CEREMONY OVERLAY (composer side)
+   Paper slides DOWN into open envelope → closes → seal appears
+══════════════════════════════════════════════════════════════════ */
+#sealingOverlay {
+  position:fixed; inset:0; z-index:200;
+  background:rgba(4,8,20,.90); backdrop-filter:blur(16px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:1.1rem; padding:2rem;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .5s var(--io), visibility .5s;
+}
+#sealingOverlay.open { opacity:1; visibility:visible; pointer-events:all; }
+
+.sealing-stage {
+  position:relative;
+  width:clamp(180px,35vw,280px);
+  display:flex; align-items:flex-end; justify-content:center;
+}
+/* Paper hovers above open envelope then drops in */
+.seal-paper {
+  position:absolute;
+  bottom:30%; left:50%;
+  transform:translateX(-50%) translateY(0);
+  width:66%; aspect-ratio:580/790; z-index:5;
+  filter:drop-shadow(0 -5px 18px rgba(0,0,0,.5));
+  transition:none;
+}
+.seal-paper img { width:100%; height:100%; object-fit:fill; border-radius:2px; display:block; }
+.seal-paper.drop {
+  transition:transform 1.0s var(--io), opacity .25s ease .85s;
+  transform:translateX(-50%) translateY(66%);
+  opacity:0;
+}
+
+.seal-env-wrap { width:100%; position:relative; }
+.seal-env-wrap img { width:100%; display:block; filter:drop-shadow(0 14px 40px rgba(0,0,0,.7)); transition:opacity .5s var(--io); border-radius:2px; }
+.seal-env-open   { position:relative; }
+.seal-env-closed { position:absolute; inset:0; width:100%; opacity:0; }
+
+/* Seal badge — smaller, properly centred on envelope */
+.seal-badge {
+  position:absolute;
+  /* Bottom-centre of the closed envelope flap */
+  bottom: 35%;  left:50%;
+  transform:translateX(-50%) scale(0);
+  width: 18%; aspect-ratio:1; z-index:6;
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.5));
+  transition:transform .5s var(--snap), opacity .4s ease;
+  opacity:0;
+}
+.seal-badge.pop { transform:translateX(-50%) scale(1); opacity:1; }
+
+.sealing-label {
+  font-family:'DearDiary',cursive; font-size:clamp(1.1rem,2.8vw,1.6rem);
+  color:var(--gold-light); text-shadow:0 0 28px rgba(200,169,110,.5);
+  text-align:center; opacity:0; transform:translateY(10px);
+  transition:opacity .6s ease .3s, transform .6s ease .3s;
+}
+.sealing-label.show { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════════════════════════════════════════════
+   SHARE MODAL
+══════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position:fixed; inset:0; z-index:300;
+  background:rgba(0,0,0,.72); backdrop-filter:blur(10px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .4s var(--io), visibility .4s;
+}
+.modal-overlay.open { opacity:1; visibility:visible; pointer-events:all; }
+.modal {
+  background:#0a1220; border:1px solid rgba(200,169,110,.32); border-radius:18px;
+  padding:2rem 1.8rem; max-width:480px; width:92%;
+  transform:translateY(20px) scale(.96); transition:transform .4s var(--out);
+  box-shadow:0 48px 110px rgba(0,0,0,.85);
+}
+.modal-overlay.open .modal { transform:translateY(0) scale(1); }
+.modal-title { font-family:'DearDiary',cursive; font-size:1.7rem; color:var(--gold-light); text-align:center; margin-bottom:.2rem; }
+.modal-sub   { font-family:'ATWriter',monospace; font-size:.58rem; color:rgba(232,213,163,.4); text-align:center; letter-spacing:.2em; text-transform:uppercase; margin-bottom:1.2rem; }
+.modal-note  {
+  font-family:'ATWriter',monospace; font-size:.56rem; color:rgba(232,213,163,.4);
+  text-align:center; letter-spacing:.06em; margin-bottom:.9rem; line-height:1.6;
+  padding:.5rem; background:rgba(200,169,110,.06); border-radius:6px;
+  border:1px solid rgba(200,169,110,.14);
+}
+.url-box {
+  background:rgba(0,0,0,.38); border:1px solid rgba(200,169,110,.18); border-radius:8px;
+  padding:.85rem; font-family:'ATWriter',monospace; font-size:.58rem;
+  color:rgba(232,213,163,.7); word-break:break-all; line-height:1.65;
+  max-height:100px; overflow-y:auto; letter-spacing:.02em; margin-bottom:.9rem;
+  scrollbar-width:thin; scrollbar-color:var(--gold-dim) transparent;
+}
+.modal-btn-row { display:flex; gap:.65rem; }
+.btn-copy { flex:1; padding:.68rem; cursor:pointer; background:rgba(200,169,110,.13); border:1px solid rgba(200,169,110,.38); border-radius:8px; color:var(--gold-light); font-family:'ATWriter',monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; transition:background .2s; }
+.btn-copy:hover { background:rgba(200,169,110,.24); }
+.btn-modal-close { padding:.68rem 1rem; cursor:pointer; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:8px; color:rgba(232,213,163,.4); font-family:'ATWriter',monospace; font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; transition:background .2s; }
+.btn-modal-close:hover { background:rgba(255,255,255,.09); }
+
+/* ══════════════════════════════════════════════════════════════════
+   RECEIVE PAGE
+══════════════════════════════════════════════════════════════════ */
+#receivePage { position:relative; z-index:1; min-height:100vh; }
+
+.waiting-room {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-height:100vh; text-align:center; padding:2rem;
+  transition:opacity .85s var(--io);
+}
+.waiting-room.fade-out { opacity:0; pointer-events:none; }
+.postbox-img {
+  width:clamp(130px,30vw,260px);
+  filter:drop-shadow(0 16px 50px rgba(0,0,0,.65));
+  animation:hero-float 7s ease-in-out infinite; margin-bottom:2rem;
+}
+@keyframes hero-float { 0%,100%{transform:translateY(0) rotate(0deg);} 40%{transform:translateY(-13px) rotate(.4deg);} 70%{transform:translateY(-7px) rotate(-.2deg);} }
+.waiting-title { font-family:'DearDiary',cursive; font-size:clamp(1.6rem,4.5vw,3rem); color:var(--gold-light); text-shadow:0 0 48px rgba(200,169,110,.35); margin-bottom:.4rem; }
+.waiting-sub   { font-family:'ATWriter',monospace; font-size:.62rem; color:rgba(232,213,163,.38); letter-spacing:.24em; text-transform:uppercase; margin-bottom:1.6rem; }
+
+/* Countdown */
+.countdown { display:flex; align-items:flex-start; gap:clamp(.4rem,1.4vw,1rem); margin-bottom:1.4rem; }
+.cd-unit { display:flex; flex-direction:column; align-items:center; gap:.24rem; }
+.cd-num {
+  font-family:'ATWriter',monospace; font-size:clamp(1.5rem,4.5vw,3rem); color:var(--gold-light);
+  background:rgba(0,0,0,.3); border:1px solid rgba(200,169,110,.22); border-radius:10px;
+  padding:.42rem clamp(.4rem,1.4vw,.85rem); min-width:clamp(52px,8.5vw,76px); text-align:center;
+  text-shadow:0 0 18px rgba(200,169,110,.4); transition:color .3s;
+}
+.cd-num.pulse { animation:cd-pulse .32s ease; }
+@keyframes cd-pulse { 0%{transform:scale(1);} 50%{transform:scale(1.08); color:#fff;} 100%{transform:scale(1);} }
+.cd-label { font-family:'ATWriter',monospace; font-size:.48rem; color:rgba(232,213,163,.34); letter-spacing:.16em; text-transform:uppercase; }
+.cd-colon { font-family:'ATWriter',monospace; font-size:clamp(1.5rem,4.5vw,3rem); color:rgba(200,169,110,.3); padding-top:.4rem; animation:colon-blink 1s step-end infinite; }
+@keyframes colon-blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+.unlock-info { font-family:'LinLibertine',Georgia,serif; font-style:italic; font-size:clamp(.72rem,1.7vw,.9rem); color:rgba(232,213,163,.4); letter-spacing:.04em; }
+
+/* ── CEREMONY ─────────────────────────────────────────────────── */
+.ceremony {
+  position:fixed; inset:0; z-index:10;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:2rem;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .7s var(--io), visibility .7s;
+  overflow:hidden;
+}
+.ceremony.active { opacity:1; visibility:visible; pointer-events:all; }
+
+.env-scene {
+  position:relative;
+  /* Size envelope to be reasonable — not too big */
+  width:clamp(180px,42vw,340px);
+  display:flex; align-items:flex-end; justify-content:center;
+}
+.env-img {
+  width:100%; display:block;
+  filter:drop-shadow(0 18px 55px rgba(0,0,0,.72));
+  transition:opacity .55s var(--io); user-select:none;
+}
+.env-closed { position:relative; z-index:2; cursor:pointer; }
+.env-open   { position:absolute; inset:0; width:100%; opacity:0; z-index:2; cursor:pointer; }
+
+.open-hint {
+  position:absolute; bottom:-12%; left:50%; transform:translateX(-50%);
+  font-family:'ATWriter',monospace; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(200,169,110,.56);
+  animation:hint-bob 2s ease-in-out infinite;
+  pointer-events:none; white-space:nowrap; z-index:10; display:none;
+}
+.open-hint.visible { display:block; }
+@keyframes hint-bob { 0%,100%{transform:translateX(-50%) translateY(0); opacity:.56;} 50%{transform:translateX(-50%) translateY(-5px); opacity:1;} }
+
+/* ── CEREMONY SEAL — small circle centred on the envelope flap ── */
+.ceremony-seal {
+  position:absolute;
+  /* Sits on the envelope fold. Adjust bottom% if your env-closed.png
+     has its seal area higher or lower. */
+  bottom: 38%;
+  left:50%; transform:translateX(-50%);
+  /* SMALLER: 12% of envelope width */
+  width: 22%; aspect-ratio:1; z-index:5;
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.55));
+  transition:transform .72s var(--io), opacity .72s var(--io);
+  cursor:pointer;
+}
+.ceremony-seal.cracking {
+  transform:translateX(-50%) scale(1.4) rotate(18deg); opacity:0;
+}
+
+/* ── LETTER REVEAL — partial slide, stays on screen ── */
+.letter-reveal {
+  position:absolute;
+  /* Starts tucked inside the envelope */
+  bottom:14%; left:50%;
+  transform:translateX(-50%) translateY(0);
+  width:66%; aspect-ratio:580/790;
+  z-index:3; opacity:0; pointer-events:none;
+  transition:none;
+}
+.letter-reveal img.reveal-paper {
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:fill; border-radius:2px;
+  filter:drop-shadow(0 -6px 22px rgba(0,0,0,.48));
+}
+.letter-reveal .reveal-text {
+  position:absolute; top:30%; left:9%; width:82%; height:55%;
+  font-family:'DearDiary',cursive; font-size:clamp(.62rem,1.5vw,.88rem);
+  line-height:1.9; color:var(--ink); overflow:hidden; word-break:break-word; pointer-events:none;
+}
+/* Slide up just 38% — paper peeks out but stays fully on screen */
+.letter-reveal.sliding {
+  opacity:1;
+  transition:transform 1.4s var(--out), opacity .4s ease;
+  transform:translateX(-50%) translateY(-38%);
+}
+
+.ceremony-subtitle {
+  font-family:'DearDiary',cursive; font-size:clamp(1.1rem,3.2vw,1.9rem);
+  color:var(--gold-light); text-shadow:0 0 30px rgba(200,169,110,.5);
+  margin-top:1.3rem; opacity:0; transform:translateY(12px);
+  transition:opacity .7s ease .8s, transform .7s ease .8s;
+}
+.ceremony.active .ceremony-subtitle { opacity:1; transform:translateY(0); }
+
+.btn-read {
+  margin-top:1rem; padding:.8rem 2.2rem;
+  background:rgba(200,169,110,.12); border:1px solid rgba(200,169,110,.48); border-radius:50px;
+  color:var(--gold-light); font-family:'ATWriter',monospace; font-size:.68rem; letter-spacing:.22em; text-transform:uppercase;
+  cursor:pointer; opacity:0; transform:translateY(10px);
+  transition:opacity .5s ease, transform .5s ease, background .22s, box-shadow .22s; pointer-events:none;
+}
+.btn-read.visible { opacity:1; transform:translateY(0); pointer-events:all; }
+.btn-read:hover { background:rgba(200,169,110,.24); box-shadow:0 0 36px rgba(200,169,110,.22); transform:translateY(-2px) !important; }
+
+/* Full letter view */
+.letter-view {
+  position:fixed; inset:0; z-index:20;
+  display:flex; align-items:center; justify-content:center;
+  padding:2rem 1.5rem;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .6s var(--io), visibility .6s;
+  overflow-y:auto;
+}
+.letter-view.active { opacity:1; visibility:visible; pointer-events:all; }
+.full-paper {
+  position:relative; width:100%; max-width:460px; aspect-ratio:580/790;
+  filter:drop-shadow(0 26px 70px rgba(0,0,0,.82));
+  animation:paper-drift 9s ease-in-out infinite;
+}
+@keyframes paper-drift { 0%,100%{transform:translateY(0) rotate(0deg);} 33%{transform:translateY(-8px) rotate(.22deg);} 66%{transform:translateY(-4px) rotate(-.16deg);} }
+.full-paper img.fp-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; border-radius:2px; }
+.full-paper .fp-text {
+  position:absolute; top:30%; left:9%; width:82%; height:55%;
+  font-family:'DearDiary',cursive; font-size:clamp(.82rem,1.9vw,1.1rem);
+  line-height:1.9; color:var(--ink); overflow-y:auto; scrollbar-width:none; word-break:break-word;
+}
+.full-paper .fp-text::-webkit-scrollbar { display:none; }
+.close-letter {
+  position:fixed; top:1.2rem; right:1.2rem;
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(0,0,0,.5); border:1px solid rgba(200,169,110,.27);
+  color:var(--gold-light); font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s; z-index:30;
+  font-family:'ATWriter',monospace;
+}
+.close-letter:hover { background:rgba(200,169,110,.2); transform:scale(1.1); }
+
+/* Particles */
+#particles { position:fixed; inset:0; pointer-events:none; z-index:8; overflow:hidden; }
+.p { position:absolute; border-radius:50%; opacity:0; animation:p-fly linear forwards; }
+@keyframes p-fly { 0%{opacity:1; transform:translate(0,0) scale(1) rotate(0deg);} 100%{opacity:0; transform:translate(var(--dx),var(--dy)) scale(.2) rotate(var(--dr));} }
+
+/* ── RESPONSIVE ───────────────────────────────────────────────────── */
+@media (max-width:860px) {
+  body { overflow-y:auto; }
+  #composerPage { height:auto; overflow:visible; padding-bottom:2.5rem; }
+  .desk-grid { grid-template-columns:1fr; }
+  .paper-col { height:auto; padding:0; }
+  .paper-wrap { height:auto; width:100%; max-width:480px; margin:0 auto; aspect-ratio:580/790; }
+  .right-col  { height:auto; overflow:visible; }
+  .tray-wrap  { max-width:480px; margin:0 auto; aspect-ratio:290/180; }
+  .seals-grid { grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(3,1fr); }
+}
+@media (max-width:480px) {
+  .seals-grid { grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(4,1fr); }
+  .tray-wrap  { aspect-ratio:290/230; }
+  .btn-row    { flex-direction:column; }
+  .datetime-row { flex-direction:column; }
+}

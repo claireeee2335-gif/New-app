@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Midnight Postbox — Write a Letter</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════ SPLASH ═══════════════════════════════ -->
+<div id="splash">
+  <img src="postbox.png" alt="" class="splash-icon"/>
+  <h1 class="splash-title">The Midnight<br/>Postbox</h1>
+  <p class="splash-sub">Long-Distance Letters · Sealed in Time</p>
+  <div class="splash-divider"></div>
+  <button class="btn-start" id="btnStart">✦ &nbsp; Begin the Experience</button>
+</div>
+
+<!-- ═══════════════════ COMPOSER PAGE ════════════════════════════ -->
+<div id="composerPage">
+
+  <header class="masthead">
+    <h1 class="masthead-title">The Midnight Postbox</h1>
+    <p class="masthead-sub">Write · Seal · Send · Wait</p>
+    <div class="masthead-rule"></div>
+  </header>
+
+  <!-- Audio controls only (no sky slider) -->
+  <div class="top-bar">
+    <span class="tb-label">Sounds</span>
+    <div class="tb-sep"></div>
+    <button class="audio-btn" id="btnRain">
+      <span class="icon">🌧</span> Rain
+    </button>
+    <button class="audio-btn" id="btnAmbience">
+      <span class="icon">🎵</span> Ambience
+    </button>
+  </div>
+
+  <!-- Two-column desk -->
+  <div class="desk-grid">
+
+    <!-- LEFT: Writing paper -->
+    <div class="paper-col">
+      <div class="paper-wrap" id="paperWrap">
+        <img src="paper-base.png" alt="Writing paper" class="paper-img"/>
+        <textarea
+          class="letter-area"
+          id="letterArea"
+          maxlength="2000"
+          placeholder="My dearest darling,&#10;&#10;Every mile between us becomes a star I trace at night…"
+        ></textarea>
+        <div class="char-count" id="charCount">0 / 2000</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Tray + Controls -->
+    <div class="right-col">
+
+      <div class="tray-wrap">
+        <img src="tray.png" alt="Seal tray" class="tray-img"/>
+        <div class="seals-grid" id="sealsGrid"></div>
+      </div>
+
+      <div class="controls">
+
+        <div>
+          <span class="ctrl-label">Selected Stamp</span>
+          <div class="seal-preview-row">
+            <img src="seal1.png" alt="Selected stamp" class="seal-preview-img" id="previewImg"/>
+            <span class="seal-preview-name" id="previewName">Stamp 1</span>
+          </div>
+        </div>
+
+        <div>
+          <span class="ctrl-label">Schedule Delivery</span>
+          <div class="datetime-row">
+            <div class="field">
+              <span class="ctrl-label" style="font-size:.5rem;color:rgba(232,213,163,.3);margin-bottom:0">Date</span>
+              <input type="date" id="delivDate"/>
+            </div>
+            <div class="field">
+              <span class="ctrl-label" style="font-size:.5rem;color:rgba(232,213,163,.3);margin-bottom:0">Time</span>
+              <input type="time" id="delivTime"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-msg" id="statusMsg"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-schedule" id="btnSchedule">✉ &nbsp;Schedule</button>
+          <button class="btn btn-express"  id="btnExpress" >⚡ &nbsp;Express</button>
+        </div>
+
+      </div><!-- /controls -->
+    </div><!-- /right-col -->
+  </div><!-- /desk-grid -->
+
+</div><!-- /composerPage -->
+
+<!-- ══════════════ SEALING CEREMONY OVERLAY ════════════════════ -->
+<div id="sealingOverlay">
+  <div class="sealing-stage">
+    <div class="seal-paper" id="sealPaper">
+      <img src="paper-base.png" alt=""/>
+    </div>
+    <div class="seal-env-wrap">
+      <img src="env-open.png"   alt="Open envelope"   class="seal-env-open"   id="sealEnvOpen"/>
+      <img src="env-closed.png" alt="Closed envelope" class="seal-env-closed" id="sealEnvClosed"/>
+      <img src="seal1.png"      alt="Wax seal"        class="seal-badge"      id="sealBadge"/>
+    </div>
+  </div>
+  <p class="sealing-label" id="sealingLabel">Sealing your letter…</p>
+</div>
+
+<!-- ══════════════════ SHARE MODAL ════════════════════════════ -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal">
+    <h2 class="modal-title">Your Letter is Sealed ✦</h2>
+    <p class="modal-sub">Share this link with your beloved</p>
+    <p class="modal-note" id="modalNote"></p>
+    <div class="url-box" id="urlBox"></div>
+    <div class="modal-btn-row">
+      <button class="btn-copy"        id="btnCopy">Copy Link</button>
+      <button class="btn-modal-close" id="btnModalClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Audio (no sketching sound) -->
+<audio id="sndRain"       src="rain-shower.mp3"      loop preload="none"></audio>
+<audio id="sndAmbience"   src="midnight-ambience.mp3" loop preload="none"></audio>
+<audio id="sndSealClick"  src="seal-click.mp3"             preload="none"></audio>
+<audio id="sndMatchStrike" src="match-strike.mp3"          preload="none"></audio>
+<audio id="sndWaxStamp"   src="wax-stamp.mp3"              preload="none"></audio>
+
+<script src="composer.js"></script>
+</body>
+</html>

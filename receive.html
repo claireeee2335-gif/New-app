@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Midnight Postbox — A Letter Awaits</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<div id="receivePage">
+
+  <!-- SPLASH (audio gate) -->
+  <div id="splash">
+    <img src="postbox.png" alt="" class="splash-icon"/>
+    <h1 class="splash-title">Something Waits<br/>for You</h1>
+    <p class="splash-sub">A sealed letter · held by time</p>
+    <div class="splash-divider"></div>
+    <button class="btn-start" id="btnStart">✦ &nbsp; Open the Postbox</button>
+  </div>
+
+  <!-- WAITING ROOM -->
+  <div class="waiting-room" id="waitingRoom" style="display:none">
+    <img src="postbox.png" alt="The Midnight Postbox" class="postbox-img"/>
+    <h1 class="waiting-title" id="waitingTitle">Your letter is on its way…</h1>
+    <p class="waiting-sub">Sealed by someone who loves you</p>
+
+    <div class="countdown" id="countdownEl">
+      <div class="cd-unit"><span class="cd-num" id="cdD">00</span><span class="cd-label">Days</span></div>
+      <span class="cd-colon">:</span>
+      <div class="cd-unit"><span class="cd-num" id="cdH">00</span><span class="cd-label">Hours</span></div>
+      <span class="cd-colon">:</span>
+      <div class="cd-unit"><span class="cd-num" id="cdM">00</span><span class="cd-label">Mins</span></div>
+      <span class="cd-colon">:</span>
+      <div class="cd-unit"><span class="cd-num" id="cdS">00</span><span class="cd-label">Secs</span></div>
+    </div>
+
+    <p class="unlock-info" id="unlockInfo">—</p>
+  </div>
+
+  <!-- CEREMONY -->
+  <div class="ceremony" id="ceremony">
+    <div class="env-scene" id="envScene">
+      <img src="env-closed.png" alt="Sealed envelope" class="env-img env-closed" id="envClosed"/>
+      <!-- Seal sits on the envelope flap — src set by JS from URL param -->
+      <img src="seal1.png"      alt="Wax seal"        class="ceremony-seal"       id="ceremonySeal"/>
+      <img src="env-open.png"   alt="Open envelope"   class="env-img env-open"    id="envOpen"/>
+      <div class="letter-reveal" id="letterReveal">
+        <img src="paper-base.png" alt="" class="reveal-paper"/>
+        <div class="reveal-text" id="revealText"></div>
+      </div>
+      <span class="open-hint" id="openHint">✦ &nbsp;Click to unseal</span>
+    </div>
+    <p class="ceremony-subtitle">Your letter has arrived</p>
+    <button class="btn-read" id="btnRead">Read the Letter</button>
+  </div>
+
+  <!-- FULL LETTER VIEW -->
+  <div class="letter-view" id="letterView">
+    <div class="full-paper">
+      <img src="paper-base.png" alt="" class="fp-bg"/>
+      <div class="fp-text" id="fpText"></div>
+    </div>
+    <button class="close-letter" id="closeLetterBtn">✕</button>
+  </div>
+
+</div><!-- /receivePage -->
+
+<!-- Audio -->
+<audio id="sndPostboxOpen" src="postbox-open.mp3"      preload="none"></audio>
+<audio id="sndEnvTear"     src="envelope-tear.mp3"     preload="none"></audio>
+<audio id="sndPaperSlide"  src="paper-slide.mp3"        preload="none"></audio>
+<audio id="sndAmbience"    src="midnight-ambience.mp3"  loop preload="none"></audio>
+
+<script src="receive.js"></script>
+</body>
+</html>
