@@ -636,3 +636,19 @@ body::before {
   .btn-row    { flex-direction:column; }
   .datetime-row { flex-direction:column; }
 }
+/* Envelop Seal update */
+#ceremonySeal,
+.ceremony-seal,
+#sealBadge,
+.seal-badge {
+  width: 75px !important;
+  height: 75px !important;
+
+  left: 49%;
+  bottom: 43%;   /* move seal up onto flap */
+
+  transform: translateX(-50%);
+
+  aspect-ratio: 1;
+  object-fit: contain;
+}
